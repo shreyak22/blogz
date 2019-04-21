@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Build A Blog</title>
-    </head>
-    <body>
-        <div>
-            <p style="display:inline-block;">Main Blog Page</p>
-            <p style="display:inline-block;">Add a blog entry</p>
-        </div>
+{% extends "base.html" %}
+
+{% block content %}
+       
         <div>
             <h2>Build A Blog !</h2>
         </div>
@@ -18,18 +12,11 @@
     
             <ul>
                 {% for post in posts %}
-                <li>{{post.title}}
+                <li><a href="/post-title?id={{post.id}}" >{{post.title}}</a>
                     <br>
                     {{post.text}}</li>
                 {% endfor %}
             </ul>
     
         {% endif %}
-    
-
-
-
-    </body>
-
-
-</html>
+{% endblock %}

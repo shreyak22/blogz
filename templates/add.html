@@ -1,14 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Build A Blog</h1>
+    
+    <div>
+        <h1>Add a Blog Entry</h1>
+    </div>
     <form method='post'>
-            <label for="blog">New Blog Post: </label>
+            <label for=title>Title for new blog</label>
+            <br>
+                <input type="text" name="title" id="title">
+            <br>
+            <br>
+
+            <label for="blog">Your New Blog Post: </label>
                 <br>
         
-            <textarea name='task' id = "blog" rows="5" cols="30"></textarea>
+            <textarea name='post' id = "blog" rows="5" cols="30"></textarea>
+            <br>
+            <br>
         
-        <input type="submit" value='post' />
+        <input type="submit" value='Add Entry' />
     </form>
 
     <hr />
