@@ -8,14 +8,16 @@
     <form method='post'>
             <label for=title>Title for new blog</label>
             <br>
-                <input type="text" name="title" id="title">
+                <input type="text" name="title" id="title" value={{title_value}}>
+                <label class="error">{{title_error}}</label>
             <br>
             <br>
 
             <label for="blog">Your New Blog Post: </label>
                 <br>
         
-            <textarea name='post' id = "blog" rows="5" cols="30"></textarea>
+            <textarea name='post' id = "blog" rows="5" cols="30">{{post_value}}</textarea>
+            <label class="error">{{title_error}}</label>
             <br>
             <br>
         

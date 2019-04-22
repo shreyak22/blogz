@@ -2,6 +2,12 @@
 <html>
     <head>
         <title>{{title}}</title>
+        <style>
+            .error {
+                color: red;
+
+            }
+        </style>
     </head>
 <body>
 
@@ -9,8 +15,9 @@
     <div>
             <a href="/blog"><p style="display:inline-block;">Main Blog Page</p></a>
             &nbsp;&nbsp;&nbsp;
-            <a href="/add"><p style="display:inline-block;">Add a blog entry</p></a>
+            <a href="/newpost"><p style="display:inline-block;">Add a blog entry</p></a>
         </div>
+        
         {% block content %}
         {% endblock %}
 
