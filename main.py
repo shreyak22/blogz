@@ -35,12 +35,16 @@ def add():
     if request.method == 'POST':
         title_name = request.form['title']
         post = request.form['post']   
-        if title_name == "" or post == "":
-            return render_template('add.html', title_error="This field is required", post_value=post, title_value=title_name)
-        new_post = Post(title_name, post)
-        db.session.add(new_post)
-        db.session.commit()
-        return render_template('add-post.html', post=new_post)
+        if title_name == "" or post == "" :
+            return render_template('add.html', title_error="This field is required", 
+            body_error="This field is required", post_value=post, title_value=title_name)
+        
+        
+        else:
+            new_post = Post(title_name, post)
+            db.session.add(new_post)
+            db.session.commit()
+            return render_template('add-post.html', post=new_post)
 
     
     return render_template('add.html')
