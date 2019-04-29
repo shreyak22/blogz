@@ -1,9 +1,9 @@
-from flask import Flask, request, redirect, render_template, flash
+from flask import Flask, request, redirect, render_template, flash, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:12356790@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:12356790@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'wertyuiop1234'
@@ -14,11 +14,82 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     text = db.Column(db.String(255))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     
     def __init__(self, title, text):
         self.title = title
         self.text = text
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120))
+    blog_posts = db.relationship('Post', backref='owner')
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
+
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        users = User.query.filter_by(email=email)
+        # getting the user of that email from  database
+        if users.count() == 1:
+            user = users.first()
+            if check_pw_hash(password, user.pw_hash):
+                session['user'] = user.email
+                flash('welcome back, ' + user.email)
+                return redirect("/")
+        flash('bad username or password')
+        return redirect("/login")
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        verify = request.form['verify']
+        if not is_email(email):
+            flash('zoiks! "' + email + '" does not seem like an email address')
+            return redirect('/register')
+        email_db_count = User.query.filter_by(email=email).count()
+        if email_db_count > 0:
+            flash('yikes! "' + email + '" is already taken and password reminders are not implemented')
+            return redirect('/register')
+        if password != verify:
+            flash('passwords should match')
+            return redirect('/register')
+        user = User(email=email, password=password)
+        db.session.add(user)
+        db.session.commit()
+        session['user'] = user.email
+        return redirect("/")
+    else:
+        return render_template('register.html')
+
+def is_email(string):
+    
+    atsign_index = string.find('@')
+    atsign_present = atsign_index >= 0
+    if not atsign_present:
+        return False
+    else:
         
+        domain_dot_index = string.find('.', atsign_index)
+        domain_dot_present = domain_dot_index >=0 
+        return domain_dot_present
+        
+@app.route("/logout", methods=['POST'])
+def logout():
+    del session['user']
+    return redirect("/")
 
 
 @app.route('/blog', methods=['GET'])
@@ -27,7 +98,7 @@ def index():
     posts = Post.query.all()
     
 
-    return render_template('index.html',title="Build A Blog!", posts=posts)
+    return render_template('blog_page.html',title="Build A Blog!", posts=posts)
 
 
 @app.route('/newpost', methods=['POST', 'GET'])
