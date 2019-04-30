@@ -37,39 +37,39 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
-        users = User.query.filter_by(email=email)
+        users = User.query.filter_by(username=username)
         # getting the user of that email from  database
         if users.count() == 1:
             user = users.first()
             if check_pw_hash(password, user.pw_hash):
-                session['user'] = user.email
-                flash('welcome back, ' + user.email)
+                session['user'] = user.username
+                flash('welcome back, ' + user.username)
                 return redirect("/")
         flash('bad username or password')
         return redirect("/login")
 
-@app.route("/register", methods=['GET', 'POST'])
-def register():
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
     if request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
-        if not is_email(email):
-            flash('zoiks! "' + email + '" does not seem like an email address')
-            return redirect('/register')
-        email_db_count = User.query.filter_by(email=email).count()
+        if not is_email(username):
+            flash('zoiks! "' + username + '" no user')
+            return redirect('/signup')
+        email_db_count = User.query.filter_by(username=username).count()
         if email_db_count > 0:
-            flash('yikes! "' + email + '" is already taken and password reminders are not implemented')
+            flash('yikes! "' + username + '" is already taken and password reminders are not implemented')
             return redirect('/register')
         if password != verify:
             flash('passwords should match')
-            return redirect('/register')
-        user = User(email=email, password=password)
+            return redirect('/signup')
+        user = User(username=username, password=password)
         db.session.add(user)
         db.session.commit()
-        session['user'] = user.email
+        session['user'] = user.username
         return redirect("/")
     else:
         return render_template('signup.html')
@@ -121,16 +121,25 @@ def add():
     return render_template('add.html')
 
 
+@app.route('/blog', methods=['GET'])
+def single_user():
+        
+    user_name = request.args.get('username')
+    post = Post.query.get(user_name)   
+    return render_template('singleUser.html',post=post)
+
+
+
 @app.route('/blog-list', methods=['GET','POST'])
 def blog_list():
     return render_template('add-post.html', title="blog-post")
 
-@app.route('/post-title', methods=['GET'])
-def post_title():
+# @app.route('/post-title', methods=['GET'])
+# def post_title():
         
-    post_id = int(request.args.get('id'))
-    post = Post.query.get(post_id)   
-    return render_template('add-post.html',post=post)
+#     post_id = int(request.args.get('id'))
+#     post = Post.query.get(post_id)   
+#     return render_template('add-post.html',post=post)
 
 
 if __name__ == '__main__':

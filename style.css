@@ -1,0 +1,14 @@
+
+p {
+    font-family: Georgia;
+  }
+
+.header {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: blue;
+    font-size: 0em;
+}
+
+.error {
+  color: red;
+}

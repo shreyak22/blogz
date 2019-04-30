@@ -2,21 +2,29 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <body>
-        <nav>
-            <ul id="user-account">
-                <li><a href="/login">login</a></li>
-                <li><a href="/logout">logout</a></li>
-            </ul>
-            <ul>
-                <li><a href="/">home</a></li>
-                <li><a href="/blog">all posts</a></li>
-                <li><a href="/blog/newpost">new post</a></li>
-            </ul>
-        </nav>
-        
 
-<h1>blog users!</h1>
+                
+        
+        <h1>blog users!</h1>
+        <div>
+        {% if posts|length == 0 %}
+        <p>No posts yet</p>
+        {% else %}
+    
+            
+                {% for post in posts %}
+                <h2><a href="/post-title?id={{post.username}}" >{{post.title}}</a></h2>
+                    <p>{{post.text}}</p>
+                    
+                    <br>
+                {% endfor %}
+            </div>
+            
+    
+        
+        
+            {% endif %}
+
 
 {% endblock %}
 
