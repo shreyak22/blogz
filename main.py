@@ -22,12 +22,12 @@ class Post(db.Model):
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
+    username = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
-    blog_posts = db.relationship('Post', backref='owner')
+    blogs = db.relationship('Post', backref='owner')
 
-    def __init__(self, email, password):
-        self.email = email
+    def __init__(self, username, password):
+        self.username = username
         self.password = password
 
 
@@ -72,7 +72,7 @@ def register():
         session['user'] = user.email
         return redirect("/")
     else:
-        return render_template('register.html')
+        return render_template('signup.html')
 
 def is_email(string):
     
@@ -92,13 +92,13 @@ def logout():
     return redirect("/")
 
 
-@app.route('/blog', methods=['GET'])
+@app.route('/', methods=['GET'])
 def index():
     
     posts = Post.query.all()
     
 
-    return render_template('blog_page.html',title="Build A Blog!", posts=posts)
+    return render_template('index.html',title="Blogz", posts=posts)
 
 
 @app.route('/newpost', methods=['POST', 'GET'])
