@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
+
 from hashutils import check_pw_hash, make_pw_hash
 
 app = Flask(__name__)
@@ -7,7 +8,7 @@ app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:12356790@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
-app.secret_key = 'wertyuiop1234'
+app.secret_key = 'qerfgthbfvdcswfrnfekffd'
 
 
 class Post(db.Model):
@@ -31,6 +32,13 @@ class User(db.Model):
     def __init__(self, username, password):
         self.username = username
         self.password = make_pw_hash(password)
+
+@app.before_request
+def require_login():
+    
+    allowed_routes = ['login', 'signup', 'index', 'single_user']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
 
 
 
@@ -79,11 +87,15 @@ def signup():
     else:
         return render_template('signup.html')
         
-@app.route("/logout", methods=['GET'])
+# @app.route("/logout", methods=['GET'])
+# def logout():
+#     del session['username']
+#     return redirect('/blog')
+@app.route('/logout')
 def logout():
-    if 'username' in session:
-        del session['username']
-    return redirect("/blog")
+
+   session.pop('username', None)
+   return redirect('blog')
 
 
 @app.route('/', methods=['GET'])
@@ -100,12 +112,6 @@ def logged_in_user():
     return owner
 
 
-# @app.before_request
-# def require_login():
-#     endpoints_without_login = ['login', 'single_user', 'signup', 'index'] 
-
-#     if not ('username' in session or request.endpoint in endpoints_without_login):
-#         return redirect("/signup")
         
 
 
@@ -145,8 +151,11 @@ def single_user():
 @app.route('/blog_page', methods=['GET'])
 def blog_list():
     post_id = request.args.get('id')
-    post = Post.query.get(post_id)
-    return render_template('blog_page.html', title="blog-post", post = post)
+    if post_id is not None:
+        post = Post.query.get(post_id)
+        return render_template('blog_page.html', title="blog-post", post = post)
+    else:
+        return redirect('/blog')
 
 
 

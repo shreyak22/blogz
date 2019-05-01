@@ -3,6 +3,7 @@ body {
   width: 800px;
   margin: 0 auto;
   padding: 10px;
+  background-color: blanchedalmond;
 }
 
 .error {
@@ -43,6 +44,7 @@ hr {
 .post-title {
   font-weight: bold;
   font-size: 20px;
+  background-color: blueviolet;
 }
 
 .post-body {
@@ -73,3 +75,5 @@ nav #user-account {
 .flashes {
   color: red;
 }
+
+
