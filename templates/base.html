@@ -1,23 +1,12 @@
 <!doctype html>
 <html>
     <head>
-        <link  href="./style.css" type="text/css" rel="stylesheet">
         <title>{{title}}</title>
-        <!-- <style>
-            .error {
-                color: red;
-
-            }
-        </style> -->
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
     </head>
 <body>
 
     
-    <!-- <div>
-            <a href="/blog"><p style="display:inline-block;">Main Blog Page</p></a>
-            &nbsp;&nbsp;&nbsp;
-            <a href="/newpost"><p style="display:inline-block;">Add a blog entry</p></a>
-        </div> -->
         <nav>
                 <ul id="user-account">
                     <li><a href="/login">login</a></li>
@@ -28,8 +17,23 @@
                     <li><a href="/blog">all posts</a></li>
                     <li><a href="/newpost">new post</a></li>
                 </ul>
-            </nav>
-        
+            
+         
+            
+        </nav>
+
+        {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+
+
         {% block content %}
         {% endblock %}
 

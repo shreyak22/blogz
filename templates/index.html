@@ -7,17 +7,21 @@
         
         <h1>blog users!</h1>
         <div>
-        {% if posts|length == 0 %}
-        <p>No posts yet</p>
+        {% if users|length == 0 %}
+        <p>No users yet</p>
         {% else %}
     
-            
-                {% for post in posts %}
-                <h2><a href="/post-title?id={{post.username}}" >{{post.title}}</a></h2>
-                    <p>{{post.text}}</p>
+                <ul>
+                {% for user in users %}
+                <li><a href="/blog?user={{user.id}}">
+
                     
-                    <br>
+                    {{user.username}}</a>
+                   
+                </li>
+
                 {% endfor %}
+                </ul>
             </div>
             
     

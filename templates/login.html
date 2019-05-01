@@ -27,19 +27,24 @@
         <tbody><tr>
             <td><label for="username">Username</label></td>
             <td>
-                <input name="username" type="text" value="">
+                <input name="username" type="text" value="{{user_value}}">
+                <span class="error">{{user_error}}</span>
             </td>
         </tr>
         <tr>
             <td><label for="password">Password</label></td>
             <td>
                 <input name="password" type="password">
+                <span class="error">{{pass_error}}</span>
+            
             </td>
         </tr>
-    </tbody></table>
+        
+    </tbody>
+</table>
     <input type="submit">
 </form>
-<p>Don't have an account? <a href="/register">Create one!</a></p>
+<p>Don't have an account? <a href="/signup">Create one!</a></p>
 
 
 </body>
